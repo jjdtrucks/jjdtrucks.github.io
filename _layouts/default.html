@@ -4,8 +4,10 @@
   {% include head.html %}
 
   <body>
-
-    {{ content }}
+		<div id="content">
+			{{ content }}
+		</div>
+    
 
 		{% capture location %}{{ page.url | split:'/' }}{% endcapture %} 
 		{% if location == 'admin' %} {% include jsadmin.html %} {% else %} {% include jsindex.html %} {% endif %}

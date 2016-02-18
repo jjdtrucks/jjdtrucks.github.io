@@ -127,7 +127,6 @@
 
 			//SAVE
 				editor.bind('save', function (regions) {
-					console.log($('#content').html());
 					Read(CurrentPath, branch, function(data) {
 						if(data.substring(0, 4) === "---\n"){ //Extract Front Matter
 							FrontMatter = $.trim(data.split('---')[1].split('---')[0]); 
@@ -136,9 +135,10 @@
 							FrontMatter = 'Replace this text with your Front Matter block.\n\n! TIP: You can skip the triple-dashed lines (---), they will be added automatically';
 						}
 						var saveContent = FrontMatter + $('#content').html();
-						Write(CurrentPath, branch, window.btoa(unescape(encodeURIComponent(saveContent))), CommitMsg, function(data, status) {
-							new ContentTools.FlashUI(status);
-						});
+						console.log($('#content').html());
+						//Write(CurrentPath, branch, window.btoa(unescape(encodeURIComponent(saveContent))), CommitMsg, function(data, status) {
+						//	new ContentTools.FlashUI(status);
+						//});
 					});
 			  });
 

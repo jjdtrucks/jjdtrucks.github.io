@@ -46,8 +46,8 @@
 </head><!--/head-->
 
   <body>
-
-    <header id="home">
+		<div id="content">
+			<header id="home">
     <div class="main-nav">
       <div class="container">
         <div class="navbar-header">
@@ -98,6 +98,8 @@
       </div>
     </div>
   </footer>
+		</div>
+    
 
 		 
 		 <script type="text/javascript" src="/assets/js/jquery.js"></script>
@@ -118,7 +120,7 @@
 				  	$('.error-message').text(error);
 				  } else {
 				    sessionStorage.setItem('aheteweb', true);
-				    window.location = "http://jjdtrucks.com";
+				    window.location = "http://127.0.0.1:4000/";
 				  }
 				});
 			}
