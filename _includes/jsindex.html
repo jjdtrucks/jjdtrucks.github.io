@@ -134,7 +134,7 @@
 						}else{ //Set a default Front Matter (wont be saved)
 							FrontMatter = 'Replace this text with your Front Matter block.\n\n! TIP: You can skip the triple-dashed lines (---), they will be added automatically';
 						}
-						var saveContent = FrontMatter + $('#content').html();
+						var saveContent = FrontMatter + $('#content').html().trim();
 						Write(CurrentPath, branch, window.btoa(unescape(encodeURIComponent(saveContent))), CommitMsg, function(data, status) {
 							new ContentTools.FlashUI(status);
 						});
