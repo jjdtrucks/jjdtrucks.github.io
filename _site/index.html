@@ -47,8 +47,7 @@
 
   <body>
 		<div id="content">
-			<div id="content">
-  <header id="home">
+			  <header id="home">
     <div id="home-slider" class="carousel slide carousel-fade" data-ride="carousel">
       <div class="carousel-inner">
         <div class="item active" style="height: 665px; background-image: url(&quot;http://miaconsultinggroup.com/uploads/file/trucks/659/img-20151006-wa0008.jpeg&quot;);">
@@ -302,7 +301,7 @@
       </div>
     </div>
   </footer>
-</div>
+
 		</div>
     
 
@@ -444,10 +443,9 @@
 							FrontMatter = 'Replace this text with your Front Matter block.\n\n! TIP: You can skip the triple-dashed lines (---), they will be added automatically';
 						}
 						var saveContent = FrontMatter + $('#content').html();
-						console.log($('#content').html());
-						//Write(CurrentPath, branch, window.btoa(unescape(encodeURIComponent(saveContent))), CommitMsg, function(data, status) {
-						//	new ContentTools.FlashUI(status);
-						//});
+						Write(CurrentPath, branch, window.btoa(unescape(encodeURIComponent(saveContent))), CommitMsg, function(data, status) {
+							new ContentTools.FlashUI(status);
+						});
 					});
 			  });
 
