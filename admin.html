@@ -1,0 +1,57 @@
+---
+layout: default
+title: About
+permalink: /admin/
+---
+
+<header id="home">
+    <div class="main-nav">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="index.html">
+            <img class="img-responsive" src="{{ "/assets/images/logo.png" | prepend: site.baseurl }}" alt="logo">
+          </a>                    
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav navbar-right">                 
+            <li class="scroll active"><a href="#home">Home</a></li>
+            <li class="scroll"><a href="#services">Service</a></li> 
+            <li class="scroll"><a href="#about-us">About Us</a></li>                     
+            <li class="scroll"><a href="#contact">Contact</a></li> 
+          </ul>
+        </div>
+      </div>
+    </div><!--/#main-nav-->
+  </header><!--/#home-->
+  <section id="services">
+    <div class="container">
+      <form style="max-width:480px; margin: 50px auto">
+			  <div id="loginError" class="alert alert-danger hidden" role="alert">
+			  	<i class="fa fa-exclamation-triangle"></i> <span class="error-message"></span>
+			  </div>
+			  <div class="form-group">
+			    <label for="userName">Usuario</label>
+			    <input type="text" class="form-control" id="userName" placeholder="Usuario" style="border-color: #dedede;">
+			  </div>
+			  <div class="form-group">
+			    <label for="password">Contraseña</label>
+			    <input type="password" class="form-control" id="password" placeholder="Contraseña" style="border-color: #dedede;">
+			  </div>
+			  <button id="Login" type="submit" class="btn btn-primary btn-block">Login</button>
+			</form>
+    </div>
+  </section><!--/#services-->
+  
+  <footer id="footer">
+    <div class="footer-top wow fadeInUp" data-wow-duration="1000ms" data-wow-delay="300ms" style="padding: 10px 0 0 0;">
+      <div class="container">
+        <p><i class="fa fa-copyright"></i> 2016 JJD TRUCKS GROUP LLC</p>
+      </div>
+    </div>
+  </footer>

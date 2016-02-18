@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <title>JJD TRUCKS GROUP LLC</title>
+  <link href="/assets/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/assets/css/animate.min.css" rel="stylesheet"> 
+  <link href="/assets/css/font-awesome.min.css" rel="stylesheet">
+  <link href="/assets/css/lightbox.css" rel="stylesheet">
+  <link href="/assets/css/main.css" rel="stylesheet">
+  <link href="/assets/css/content-tools.css" rel="stylesheet">
+  <link id="css-preset" href="/assets/css/presets/preset1.css" rel="stylesheet">
+  <link href="/assets/css/responsive.css" rel="stylesheet">
+
+  <!--[if lt IE 9]>
+    <script src="assets/js/html5shiv.js"></script>
+    <script src="assets/js/respond.min.js"></script>
+  <![endif]-->
+  
+  <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700|Open+Sans:400,300' rel='stylesheet' type='text/css'>
+  <!--<link rel="shortcut icon" href="assets/images/favicon.ico">-->
+  <style>
+  	#about-us,
+  	#contact-us {
+  		position: relative;
+  		z-index: 0;
+  	}
+  	.overlay{
+		  background: url(http://www.inspirothemes.com/polo-v1.6/images/overlay-pattern/overlay-pattern-1.png);
+	    position: absolute;
+	    top: 0;
+	    right: 0;
+	    bottom: 0;
+	    left: 0;
+	    content: " ";
+	    width: 100%;
+	    height: 100%;
+	    z-index: -1;
+	    opacity: 0.8;
+		}
+  </style>
+</head><!--/head-->
+
+  <body>
+
+    <header id="home">
+    <div class="main-nav">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="index.html">
+            <img class="img-responsive" src="/assets/images/logo.png" alt="logo">
+          </a>                    
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav navbar-right">                 
+            <li class="scroll active"><a href="#home">Home</a></li>
+            <li class="scroll"><a href="#services">Service</a></li> 
+            <li class="scroll"><a href="#about-us">About Us</a></li>                     
+            <li class="scroll"><a href="#contact">Contact</a></li> 
+          </ul>
+        </div>
+      </div>
+    </div><!--/#main-nav-->
+  </header><!--/#home-->
+  <section id="services">
+    <div class="container">
+      <form style="max-width:480px; margin: 50px auto">
+			  <div id="loginError" class="alert alert-danger hidden" role="alert">
+			  	<i class="fa fa-exclamation-triangle"></i> <span class="error-message"></span>
+			  </div>
+			  <div class="form-group">
+			    <label for="userName">Usuario</label>
+			    <input type="text" class="form-control" id="userName" placeholder="Usuario" style="border-color: #dedede;">
+			  </div>
+			  <div class="form-group">
+			    <label for="password">Contraseña</label>
+			    <input type="password" class="form-control" id="password" placeholder="Contraseña" style="border-color: #dedede;">
+			  </div>
+			  <button id="Login" type="submit" class="btn btn-primary btn-block">Login</button>
+			</form>
+    </div>
+  </section><!--/#services-->
+  
+  <footer id="footer">
+    <div class="footer-top wow fadeInUp" data-wow-duration="1000ms" data-wow-delay="300ms" style="padding: 10px 0 0 0;">
+      <div class="container">
+        <p><i class="fa fa-copyright"></i> 2016 JJD TRUCKS GROUP LLC</p>
+      </div>
+    </div>
+  </footer>
+
+		 
+		 <script type="text/javascript" src="/assets/js/jquery.js"></script>
+  <script type="text/javascript" src="/assets/js/bootstrap.min.js"></script>
+  <script src="https://cdn.firebase.com/js/client/2.4.0/firebase.js"></script>
+	<script>
+		//DB connection
+			var ref = new Firebase("https://aheteweb.firebaseio.com");
+
+		// Login / out
+			function logIn(email, pass){
+				ref.authWithPassword({
+				  email    : email,
+				  password : pass
+				}, function authHandler(error, authData) {
+				  if (error) {
+				  	$('#loginError').removeClass('hidden');
+				  	$('.error-message').text(error);
+				  } else {
+				    sessionStorage.setItem('aheteweb', true);
+				    window.location = "http://jjdtrucks.com";
+				  }
+				});
+			}
+
+			function logOut(){
+				ref.unauth();
+				sessionStorage.setItem('aheteweb', false);
+				window.location = window.location.href;
+			}
+
+			//LogIn
+				$('#Login').on('click', function(e){
+					e.preventDefault();
+					logIn($('#userName').val(), $('#password').val())
+				});
+	</script> 
+    
+
+  </body>
+
+</html>

@@ -1,0 +1,146 @@
+<script type="text/javascript" src="{{ "/assets/js/jquery.js" | prepend: site.baseurl }}"></script>
+  <script type="text/javascript" src="{{ "/assets/js/bootstrap.min.js" | prepend: site.baseurl }}"></script>
+  <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
+  <script type="text/javascript" src="{{ "/assets/js/jquery.inview.min.js" | prepend: site.baseurl }}"></script>
+  <script type="text/javascript" src="{{ "/assets/js/wow.min.js" | prepend: site.baseurl }}"></script>
+  <script type="text/javascript" src="{{ "/assets/js/mousescroll.js" | prepend: site.baseurl }}"></script>
+  <script type="text/javascript" src="{{ "/assets/js/smoothscroll.js" | prepend: site.baseurl }}"></script>
+  <script type="text/javascript" src="{{ "/assets/js/jquery.countTo.js" | prepend: site.baseurl }}"></script>
+  <script type="text/javascript" src="{{ "/assets/js/lightbox.min.js" | prepend: site.baseurl }}"></script>
+  <script type="text/javascript" src="{{ "/assets/js/main.js" | prepend: site.baseurl }}"></script>
+  <script type="text/javascript" src="{{ "/assets/js/content-tools.js" | prepend: site.baseurl }}"></script>
+  <script src="https://cdn.firebase.com/js/client/2.4.0/firebase.js"></script>
+	<script>
+		//Store the log status
+			var ref = new Firebase("https://aheteweb.firebaseio.com");
+			var userLogged = sessionStorage.getItem('aheteweb');
+		if (userLogged === "true") {
+			//GITHUB
+				var RepoPath = '/repos/jjdtrucks/jjdtrucks.github.io/';
+				var branch = 'master';
+				var CurrentPath = 'index.html';
+				var CommitMsg = 'changes commited';
+
+				function Api(method, url, callback, data, raw) {
+					ref.child("jjdtrucks").on("value", function(snapshot) {
+					  url = 'https://api.github.com' + url;
+					  url += ((/\?/).test(url) ? '&' : '?');
+					  url += '&' + (new Date()).getTime();
+
+					  if(data && Object.keys(data).length > 1){
+					    data = JSON.stringify(data)
+					  }
+					  
+					  $.ajax({
+					    type: method,
+					    url: url,
+					    data: data,
+					    dataType: 'json',
+					    beforeSend: function(xhrObj){
+					      xhrObj.setRequestHeader('Accept','application/vnd.github.v3+json');
+					      xhrObj.setRequestHeader('Content-Type','application/json;charset=UTF-8');
+					      xhrObj.setRequestHeader('Authorization', 'token ' + snapshot.val());
+					    },
+					    success: function(data) {
+					      callback(data, 'ok');
+					    },
+					    error: function(data, argument2, argument3) {
+					      callback(data, 'no');
+					    }
+					  });
+					}, function (errorObject) {
+					  console.log("The read failed: " + errorObject.code);
+					});
+				}
+
+				//Get tree
+					function Tree(branch, callback){
+				    Api('GET', RepoPath + 'git/trees/' + branch, function(data) {
+				      callback(data.tree);
+				    });
+				  }
+				
+				//Show Folders Content
+				  function Content(path, branch, callback) {
+				    Api('GET', RepoPath + 'contents' + (path ? '/' + encodeURI(path) : ''), callback, { ref: branch });
+				  };
+
+				//Update files
+				  function Write(path, branch, content, CommitMsg, callback) {
+				    Sha(encodeURI(path), branch, function(data) {
+				      Api("PUT", RepoPath + "contents/" + encodeURI(path), callback, {
+				        message: CommitMsg,
+				        content: content,
+				        branch: branch,
+				        sha: data
+				      });
+				    });
+				  };
+
+				//Get Sha
+				  function Sha(path, branch, callback) {
+				    Api("GET", RepoPath + "contents/" + path + "?ref=" + branch, function(data) {
+				      if(data === 403){//if file is bigger than 1mb it's not returned so look inside the container folder
+				        cut = path.lastIndexOf('/');
+				        fname = path.substring(cut + 1);
+				        findIn = decodeURI(path).replace('/' + fname, ''); 
+				        Content(findIn, branch, function(data){ 
+				        	if(data === 403){ // If looking in the container folder throws error it's not in a folder but in the root 
+				        		Tree(branch, function(data){
+									    $.each(data, function( index, value ){
+						            if(value.path === decodeURI(path)){
+						              callback(value.sha);
+						            }
+						          });
+								    });
+				        	}else{
+					          $.each(data, function( index, value ){
+					            if(value.path === decodeURI(path)){
+					              callback(value.sha);
+					            }
+					          });
+				        	}
+				        });
+				      }else if(data === 404){
+				        callback(data);
+				      }else{
+				        callback(data.sha);
+				      }
+				    });
+				  };
+
+				//Show Files Content
+				  function Read(path, branch, callback) {
+				    Api('GET', RepoPath + 'contents/' + encodeURI(path) + '?ref=' + branch, function(data){
+				    	callback(window.atob(data.content));
+				    });
+				  };
+			
+			//EDITOR
+				var editor;
+				editor = ContentTools.EditorApp.get();
+				editor.init('*[data-editable]', 'data-name');
+
+				//Requided for when new editable regions are added
+					var element;
+					var region;
+
+			//SAVE
+				editor.bind('save', function (regions) {
+					console.log($('#content').html());
+					Read(CurrentPath, branch, function(data) {
+						if(data.substring(0, 4) === "---\n"){ //Extract Front Matter
+							FrontMatter = $.trim(data.split('---')[1].split('---')[0]); 
+							FrontMatter = '---\n' + FrontMatter + '\n---\n'
+						}else{ //Set a default Front Matter (wont be saved)
+							FrontMatter = 'Replace this text with your Front Matter block.\n\n! TIP: You can skip the triple-dashed lines (---), they will be added automatically';
+						}
+						var saveContent = FrontMatter + $('#content').html();
+						Write(CurrentPath, branch, window.btoa(unescape(encodeURIComponent(saveContent))), CommitMsg, function(data, status) {
+							new ContentTools.FlashUI(status);
+						});
+					});
+			  });
+
+		}
+	</script>

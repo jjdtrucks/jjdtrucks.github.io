@@ -1,0 +1,35 @@
+<script type="text/javascript" src="{{ "/assets/js/jquery.js" | prepend: site.baseurl }}"></script>
+  <script type="text/javascript" src="{{ "/assets/js/bootstrap.min.js" | prepend: site.baseurl }}"></script>
+  <script src="https://cdn.firebase.com/js/client/2.4.0/firebase.js"></script>
+	<script>
+		//DB connection
+			var ref = new Firebase("https://aheteweb.firebaseio.com");
+
+		// Login / out
+			function logIn(email, pass){
+				ref.authWithPassword({
+				  email    : email,
+				  password : pass
+				}, function authHandler(error, authData) {
+				  if (error) {
+				  	$('#loginError').removeClass('hidden');
+				  	$('.error-message').text(error);
+				  } else {
+				    sessionStorage.setItem('aheteweb', true);
+				    window.location = "http://jjdtrucks.com";
+				  }
+				});
+			}
+
+			function logOut(){
+				ref.unauth();
+				sessionStorage.setItem('aheteweb', false);
+				window.location = window.location.href;
+			}
+
+			//LogIn
+				$('#Login').on('click', function(e){
+					e.preventDefault();
+					logIn($('#userName').val(), $('#password').val())
+				});
+	</script>

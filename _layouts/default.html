@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+
+  {% include head.html %}
+
+  <body>
+
+    {{ content }}
+
+		{% capture location %}{{ page.url | split:'/' }}{% endcapture %} 
+		{% if location == 'admin' %} {% include jsadmin.html %} {% else %} {% include jsindex.html %} {% endif %}
+    
+
+  </body>
+
+</html>
